@@ -97,7 +97,8 @@ def server_program():
         # update_nonce_list(nonce)
 
         # send public key and nonce
-        conn.send(f"{pk_hex}{SEPARATOR}{nonce}".encode())
+        # conn.send(f"{pk_hex}{SEPARATOR}{nonce}".encode())
+        conn.send(f"{pk_hex}".encode())
         # file related stuff
         msg = conn.recv(BUFFER_SIZE).decode()
         print("Message from client: ", msg)
