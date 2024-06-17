@@ -120,12 +120,12 @@ def server_program():
         # informing the recived file 
         print("Receiving file:", filename)
 
-        # store encrypted image as a byte array
-        ecc = bytearray()
+        # store encrypted image as a string
+        ecc = ""
         with open(filename, "wb") as f:
             while True:
                 # read 1024 bytes from the socket (receive)
-                bytes_read = conn.recv(BUFFER_SIZE)
+                bytes_read = conn.recv(BUFFER_SIZE).decode()
                 if not bytes_read:
                 # terminate file transmitting is done
                     break
@@ -133,9 +133,11 @@ def server_program():
                 ecc.extend(bytes_read)
             # base64 decoding before/after decrypting
             print("Decrypting...")
-            enc = base64.b64decode(bytes(ecc))
+            # enc = base64.b64decode(bytes(ecc))
+            enc = ecc
             dec = ecies.decrypt(sk_hex, enc)
-            img = base64.b64decode(dec)
+            # img = base64.b64decode(dec)
+            img = dec
             f.write(img)
 
         print("File received. model being executed..")
