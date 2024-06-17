@@ -52,11 +52,11 @@ f_data = [int(x) for x in r_data]
 
 new_file_name = file_name.replace(".txt", "")
 
-new_dir = f"C:/Users/Jo/Documents/ma_thesis_ternary_authentication/{new_file_name}_cloned"
+new_dir = f"C:/Users/Jo/Documents/ma_thesis_ternary_authentication/{new_file_name}_test_data"
 if not os.path.exists(new_dir):
     os.makedirs(new_dir)
 
-for i in range(0, 50):
+for i in range(0, 5):
     with open(f"{new_dir}\{new_file_name}_{i}.txt", "w+") as f:
         a = randomized_variation(f_data)
         s = ''.join(str(x) for x in a)
