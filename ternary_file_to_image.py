@@ -19,7 +19,7 @@ def ternary_2_gray(input):
     elif input == 1:
         return [122,122,122]
     else:
-        return [255,255,255]
+        return [0,0,0]
 count = 0
 path = "data_4_cloned"
 for file in os.listdir(path):
