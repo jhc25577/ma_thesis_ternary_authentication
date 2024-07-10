@@ -5,6 +5,7 @@ import model_inference as mi
 import argparse
 import ecies
 from ecies.utils import generate_eth_key, generate_key
+from ecies import encrypt, decrypt
 import base64
 import secrets
 import json
@@ -20,7 +21,8 @@ import json
 def server_program():
     # get the hostname/ip address
     # host = "192.168.178.40" ## considering when static ip
-    host = "132.231.14.165" # new static ip
+    # host = "132.231.14.165" # new static ip
+    host = "192.168.1.173" # static ip of sender
     # host = "rp-labs1.local"
     port = 18000  #  port no above reserved ports (1024)
 
@@ -56,7 +58,7 @@ def server_program():
     parser.add_argument(
     '-d',
     '--devices',
-    default='../efficientnet/local-intact/5-boards/labels.txt',
+    default='labels.txt',
     help='list of enrolled devices')
     args = parser.parse_args()
     
@@ -120,12 +122,15 @@ def server_program():
         # informing the recived file 
         print("Receiving file:", filename)
 
-        # store encrypted image as a string
-        ecc = ""
+        data_1 = b'Hi my name is Jo\n'
+        print(encrypt(pk_hex, data_1))
+
+        # store encrypted image as a byte array
+        ecc = bytearray()
         with open(filename, "wb") as f:
             while True:
                 # read 1024 bytes from the socket (receive)
-                bytes_read = conn.recv(BUFFER_SIZE).decode()
+                bytes_read = conn.recv(BUFFER_SIZE)
                 if not bytes_read:
                 # terminate file transmitting is done
                     break
@@ -135,9 +140,11 @@ def server_program():
             print("Decrypting...")
             # enc = base64.b64decode(bytes(ecc))
             enc = ecc
-            dec = ecies.decrypt(sk_hex, enc)
+            print("incoming data: ", ecc)
+            time.sleep(2)
+            dec = decrypt(sk_hex, enc)
             # img = base64.b64decode(dec)
-            img = dec
+            img = dec.decode("utf-8")
             f.write(img)
 
         print("File received. model being executed..")
